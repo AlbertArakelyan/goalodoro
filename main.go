@@ -21,9 +21,6 @@ type Goal struct {
 
 var goals []Goal
 var goalFile = "goals.json"
-var timerRunning = false
-var startTime time.Time
-var selectedGoalIndex = -1
 
 func loadGoals() {
 	file, err := os.ReadFile(goalFile)
@@ -37,12 +34,23 @@ func saveGoals() {
 	_ = os.WriteFile(goalFile, data, 0644)
 }
 
+func formatDuration(d time.Duration) string {
+	h := int(d.Hours())
+	m := int(d.Minutes()) % 60
+	s := int(d.Seconds()) % 60
+	return fmt.Sprintf("%02d:%02d:%02d", h, m, s)
+}
+
 func main() {
 	a := app.New()
 	w := a.NewWindow("Goalodoro")
 	w.Resize(fyne.NewSize(600, 500))
 
 	loadGoals()
+
+	selectedGoalIndex := -1
+	var ticker *time.Ticker
+	var stopChan chan struct{}
 
 	goalList := widget.NewList(
 		func() int { return len(goals) },
@@ -51,8 +59,10 @@ func main() {
 		},
 		func(i int, o fyne.CanvasObject) {
 			g := goals[i]
-			percent := float64(g.Spent.Hours()) / g.TargetHours * 100
-			o.(*widget.Label).SetText(fmt.Sprintf("%s - %.1f%% (%.1fh/%.1fh)", g.Name, percent, g.Spent.Hours(), g.TargetHours))
+			spentStr := formatDuration(g.Spent)
+			target := time.Duration(g.TargetHours * float64(time.Hour))
+			targetStr := formatDuration(target)
+			o.(*widget.Label).SetText(fmt.Sprintf("%s - %s / %s", g.Name, spentStr, targetStr))
 		},
 	)
 
@@ -79,36 +89,40 @@ func main() {
 		dlg.Show()
 	})
 
-	startBtn := widget.NewButton("▶ Start", func() {
+	startBtn := widget.NewButton("▶️ Start", func() {
 		if selectedGoalIndex == -1 {
-			dialog.ShowInformation("No Goal Selected", "Please select a goal to start timing.", w)
+			dialog.ShowInformation("No Goal Selected", "Please select a goal to start.", w)
 			return
 		}
-		if !timerRunning {
-			startTime = time.Now()
-			timerRunning = true
-			dialog.ShowInformation("Started", fmt.Sprintf("Started tracking time for '%s'", goals[selectedGoalIndex].Name), w)
+		if ticker != nil {
+			return
 		}
+		stopChan = make(chan struct{})
+		ticker = time.NewTicker(time.Second)
+		go func() {
+			for {
+				select {
+				case <-ticker.C:
+					goals[selectedGoalIndex].Spent += time.Second
+					saveGoals()
+					goalList.Refresh()
+				case <-stopChan:
+					ticker.Stop()
+					ticker = nil
+					return
+				}
+			}
+		}()
 	})
 
-	stopBtn := widget.NewButton("■ Stop", func() {
-		if timerRunning {
-			elapsed := time.Since(startTime)
-			goals[selectedGoalIndex].Spent += elapsed
-			saveGoals()
+	stopBtn := widget.NewButton("⏹ Stop", func() {
+		if ticker != nil && stopChan != nil {
+			close(stopChan)
 			goalList.Refresh()
-			timerRunning = false
-			dialog.ShowInformation("Stopped", fmt.Sprintf("Stopped. %v added to '%s'", elapsed.Truncate(time.Second), goals[selectedGoalIndex].Name), w)
-		} else {
-			dialog.ShowInformation("Not Running", "No timer is currently running.", w)
 		}
 	})
 
-	w.SetContent(container.NewBorder(
-		container.NewHBox(addGoalBtn, startBtn, stopBtn),
-		nil, nil, nil,
-		goalList,
-	))
-
+	controls := container.NewHBox(addGoalBtn, startBtn, stopBtn)
+	w.SetContent(container.NewBorder(controls, nil, nil, nil, goalList))
 	w.ShowAndRun()
 }
