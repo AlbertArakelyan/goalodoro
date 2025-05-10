@@ -1,1 +1,3 @@
 # Goalodoro
+A Goal-Focused Time Tracker <br>
+A simple yet powerful desktop app built with Go and Fyne to help you set goals and track the time you spend on them. Ideal for anyone practicing deliberate learning or deep work. Real-time tracking, progress persistence, and a clean UI.
