@@ -122,7 +122,17 @@ func main() {
 		}
 	})
 
-	controls := container.NewHBox(addGoalBtn, startBtn, stopBtn)
+	deleteBtn := widget.NewButton("❌ Delete", func() {
+		if selectedGoalIndex == -1 {
+			dialog.ShowInformation("No Goal Selected", "Please select a goal to delete.", w)
+			return
+		}
+		goals = append(goals[:selectedGoalIndex], goals[selectedGoalIndex+1:]...)
+		saveGoals()
+		goalList.Refresh()
+	})
+
+	controls := container.NewHBox(addGoalBtn, startBtn, stopBtn, deleteBtn)
 	w.SetContent(container.NewBorder(controls, nil, nil, nil, goalList))
 	w.ShowAndRun()
 }
