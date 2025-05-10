@@ -13,6 +13,11 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+type App struct {
+	App        fyne.App
+	MainWindow fyne.Window
+}
+
 type Goal struct {
 	Name        string        `json:"name"`
 	TargetHours float64       `json:"target_hours"`
@@ -42,9 +47,11 @@ func formatDuration(d time.Duration) string {
 }
 
 func main() {
-	a := app.New()
-	w := a.NewWindow("Goalodoro")
-	w.Resize(fyne.NewSize(600, 500))
+	var myApp App
+
+	myApp.App = app.New()
+	myApp.MainWindow = myApp.App.NewWindow("Goalodoro")
+	myApp.MainWindow.Resize(fyne.NewSize(600, 500))
 
 	loadGoals()
 
@@ -85,13 +92,13 @@ func main() {
 				saveGoals()
 				goalList.Refresh()
 			}
-		}, w)
+		}, myApp.MainWindow)
 		dlg.Show()
 	})
 
 	startBtn := widget.NewButton("▶️ Start", func() {
 		if selectedGoalIndex == -1 {
-			dialog.ShowInformation("No Goal Selected", "Please select a goal to start.", w)
+			dialog.ShowInformation("No Goal Selected", "Please select a goal to start.", myApp.MainWindow)
 			return
 		}
 		if ticker != nil {
@@ -124,7 +131,7 @@ func main() {
 
 	deleteBtn := widget.NewButton("❌ Delete", func() {
 		if selectedGoalIndex == -1 {
-			dialog.ShowInformation("No Goal Selected", "Please select a goal to delete.", w)
+			dialog.ShowInformation("No Goal Selected", "Please select a goal to delete.", myApp.MainWindow)
 			return
 		}
 		goals = append(goals[:selectedGoalIndex], goals[selectedGoalIndex+1:]...)
@@ -133,6 +140,6 @@ func main() {
 	})
 
 	controls := container.NewHBox(addGoalBtn, startBtn, stopBtn, deleteBtn)
-	w.SetContent(container.NewBorder(controls, nil, nil, nil, goalList))
-	w.ShowAndRun()
+	myApp.MainWindow.SetContent(container.NewBorder(controls, nil, nil, nil, goalList))
+	myApp.MainWindow.ShowAndRun()
 }
