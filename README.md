@@ -6,6 +6,7 @@
 ![Platforms](https://img.shields.io/badge/platforms-Mac%20OS-green)
 ![License](https://img.shields.io/github/license/AlbertArakelyan/goalodoro)
 
+
 ![Screenshot](./assets/images/screenshot.png)
 
 **What is Goalodoro?** <br>
