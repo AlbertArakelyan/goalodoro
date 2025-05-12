@@ -7,4 +7,4 @@ BUILD_NO=1
 
 build-macos:
 	rm -rf ${BINARY_NAME_MACOS}
-	fyne package -appVersion ${VERSION} -appBuild ${BUILD_NO} -name ${APP_NAME} -release
+	fyne package -appVersion ${VERSION} -appBuild ${BUILD_NO} -name ${APP_NAME} -release -icon Icon.png
