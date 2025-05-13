@@ -129,41 +129,36 @@ func Home(mainWondow fyne.Window) *fyne.Container {
 		goalList.Refresh()
 	})
 
-	booksBtn := widget.NewButton("📚 Growth Reads", func() {
-		books := []string{
-			// "The Power of Now – Eckhart Tolle",
-			// "Can’t Hurt Me – David Goggins",
-			"📘 Atomic Habits — James Clear",
-			"📕 Deep Work — Cal Newport",
-			"📗 The One Thing — Gary Keller",
-			"📙 Grit — Angela Duckworth",
-			"📔 Make Time — Jake Knapp",
-		}
-		msg := "Recommended Reads:\n\n" + fmt.Sprint("- "+books[0])
-		for _, b := range books[1:] {
-			msg += "\n- " + b
-		}
-		dialog.ShowInformation("Growth Books", msg, mainWondow)
-	})
+	// booksBtn := widget.NewButton("📚 Growth Reads", func() {
+	// 	books := []string{
+	// 		// "The Power of Now – Eckhart Tolle",
+	// 		// "Can’t Hurt Me – David Goggins",
+	// 		"📘 Atomic Habits — James Clear",
+	// 		"📕 Deep Work — Cal Newport",
+	// 		"📗 The One Thing — Gary Keller",
+	// 		"📙 Grit — Angela Duckworth",
+	// 		"📔 Make Time — Jake Knapp",
+	// 	}
+	// 	msg := "Recommended Reads:\n\n" + fmt.Sprint("- "+books[0])
+	// 	for _, b := range books[1:] {
+	// 		msg += "\n- " + b
+	// 	}
+	// 	dialog.ShowInformation("Growth Books", msg, mainWondow)
+	// })
 
-	icon, _ := fyne.LoadResourceFromPath("Icon.png")
-	logo := widget.NewIcon(icon)
-	logo.Resize(fyne.NewSize(60, 60))
+	// icon, _ := fyne.LoadResourceFromPath("Icon.png")
+	// logo := widget.NewIcon(icon)
+	// logo.Resize(fyne.NewSize(60, 60))
 
 	controls := container.NewHBox(
-		logo,
+		// logo,
 		addGoalBtn,
 		startBtn,
 		stopBtn,
 		deleteBtn,
 	)
 
-	header := container.NewVBox(
-		controls,
-		container.NewBorder(nil, nil, booksBtn, nil),
-	)
-
-	homePageContent := container.NewBorder(header, nil, nil, nil, goalList)
+	homePageContent := container.NewBorder(controls, nil, nil, nil, goalList)
 
 	return homePageContent
 }
