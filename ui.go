@@ -122,6 +122,10 @@ func (app *App) makeUI() {
 		goalList.Refresh()
 	})
 
-	controls := container.NewHBox(addGoalBtn, startBtn, stopBtn, deleteBtn)
+	icon, _ := fyne.LoadResourceFromPath("Icon.png")
+	logo := widget.NewIcon(icon)
+	logo.Resize(fyne.NewSize(60, 60))
+
+	controls := container.NewHBox(logo, addGoalBtn, startBtn, stopBtn, deleteBtn)
 	app.MainWindow.SetContent(container.NewBorder(controls, nil, nil, nil, goalList))
 }
