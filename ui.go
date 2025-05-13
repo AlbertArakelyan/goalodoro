@@ -6,7 +6,9 @@ import (
 )
 
 func (app *App) makeUI() {
+	mainLayout := layouts.NewMainLayout(app.MainWindow)
+
 	homePage := home.Home(app.MainWindow)
 
-	app.MainWindow.SetContent(layouts.MainLayout(homePage))
+	app.MainWindow.SetContent(mainLayout(homePage))
 }
