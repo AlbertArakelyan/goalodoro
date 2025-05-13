@@ -146,12 +146,7 @@ func Home(mainWondow fyne.Window) *fyne.Container {
 	// 	dialog.ShowInformation("Growth Books", msg, mainWondow)
 	// })
 
-	// icon, _ := fyne.LoadResourceFromPath("Icon.png")
-	// logo := widget.NewIcon(icon)
-	// logo.Resize(fyne.NewSize(60, 60))
-
 	controls := container.NewHBox(
-		// logo,
 		addGoalBtn,
 		startBtn,
 		stopBtn,
