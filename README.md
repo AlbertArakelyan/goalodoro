@@ -8,7 +8,7 @@
 
 ![Screenshot](./assets/images/screenshot.png)
 
-**What is Goalodoro?** <br>
+### <img align="center" width="35" height="35" src="./Icon.png"> **What is Goalodoro?**
 A simple yet powerful desktop app built with Go and Fyne to help you set goals and track the time you spend on them. Ideal for anyone practicing deliberate learning or deep work. Real-time tracking, progress persistence, and a clean UI.
 
 ---
