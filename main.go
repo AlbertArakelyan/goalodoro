@@ -1,8 +1,6 @@
 package main
 
 import (
-	"time"
-
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 )
@@ -10,12 +8,6 @@ import (
 type App struct {
 	App        fyne.App
 	MainWindow fyne.Window
-}
-
-type Goal struct {
-	Name        string        `json:"name"`
-	TargetHours float64       `json:"target_hours"`
-	Spent       time.Duration `json:"spent"`
 }
 
 func main() {
