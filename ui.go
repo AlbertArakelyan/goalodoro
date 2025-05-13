@@ -156,5 +156,7 @@ func (app *App) makeUI() {
 		container.NewBorder(nil, nil, booksBtn, nil),
 	)
 
-	app.MainWindow.SetContent(container.NewBorder(header, nil, nil, nil, goalList))
+	mainPageContent := container.NewBorder(header, nil, nil, nil, goalList)
+
+	app.MainWindow.SetContent(mainPageContent)
 }
