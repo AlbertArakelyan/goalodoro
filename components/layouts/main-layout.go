@@ -3,7 +3,6 @@ package layouts
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -14,9 +13,6 @@ func NewMainLayout(mainWindow fyne.Window) func(page *fyne.Container) *fyne.Cont
 
 		sideBarContent := container.NewVBox(
 			logo,
-			widget.NewButtonWithIcon("Book", theme.CalendarIcon(), nil),
-			widget.NewButtonWithIcon("Timer", theme.ComputerIcon(), nil),
-			widget.NewButtonWithIcon("Settings", theme.SettingsIcon(), nil),
 		)
 
 		sidebar := container.NewPadded(sideBarContent)
