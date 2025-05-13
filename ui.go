@@ -122,10 +122,39 @@ func (app *App) makeUI() {
 		goalList.Refresh()
 	})
 
+	booksBtn := widget.NewButton("📚 Growth Reads", func() {
+		books := []string{
+			// "The Power of Now – Eckhart Tolle",
+			// "Can’t Hurt Me – David Goggins",
+			"📘 Atomic Habits — James Clear",
+			"📕 Deep Work — Cal Newport",
+			"📗 The One Thing — Gary Keller",
+			"📙 Grit — Angela Duckworth",
+			"📔 Make Time — Jake Knapp",
+		}
+		msg := "Recommended Reads:\n\n" + fmt.Sprint("- "+books[0])
+		for _, b := range books[1:] {
+			msg += "\n- " + b
+		}
+		dialog.ShowInformation("Growth Books", msg, app.MainWindow)
+	})
+
 	icon, _ := fyne.LoadResourceFromPath("Icon.png")
 	logo := widget.NewIcon(icon)
 	logo.Resize(fyne.NewSize(60, 60))
 
-	controls := container.NewHBox(logo, addGoalBtn, startBtn, stopBtn, deleteBtn)
-	app.MainWindow.SetContent(container.NewBorder(controls, nil, nil, nil, goalList))
+	controls := container.NewHBox(
+		logo,
+		addGoalBtn,
+		startBtn,
+		stopBtn,
+		deleteBtn,
+	)
+
+	header := container.NewVBox(
+		controls,
+		container.NewBorder(nil, nil, booksBtn, nil),
+	)
+
+	app.MainWindow.SetContent(container.NewBorder(header, nil, nil, nil, goalList))
 }
