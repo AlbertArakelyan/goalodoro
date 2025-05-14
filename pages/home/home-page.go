@@ -33,6 +33,35 @@ func saveGoals() {
 	_ = os.WriteFile(goalFile, data, 0644)
 }
 
+func exportGoalsToJSON(mainWondow fyne.Window) {
+	dialog.ShowFileSave(func(uri fyne.URIWriteCloser, err error) {
+		if uri == nil {
+			fmt.Println("Save operation was canceled.")
+			return
+		}
+
+		if err != nil {
+			dialog.ShowError(err, mainWondow)
+			return
+		}
+
+		if uri.URI().Path() == "" {
+			dialog.ShowError(err, mainWondow)
+			return
+		}
+
+		data, _ := json.MarshalIndent(goals, "", "  ")
+		_, err = uri.Write(data)
+
+		if err != nil {
+			dialog.ShowError(err, mainWondow)
+			return
+		}
+
+		_ = uri.Close()
+	}, mainWondow)
+}
+
 func formatDuration(d time.Duration) string {
 	h := int(d.Hours())
 	m := int(d.Minutes()) % 60
@@ -128,6 +157,10 @@ func Home(mainWondow fyne.Window) *fyne.Container {
 		saveGoals()
 		goalList.Refresh()
 	})
+
+	// exportGoalsToJSONBtn := widget.NewButton("📝 Export Goals", func() {
+	// 	exportGoalsToJSON(mainWondow)
+	// })
 
 	// booksBtn := widget.NewButton("📚 Growth Reads", func() {
 	// 	books := []string{

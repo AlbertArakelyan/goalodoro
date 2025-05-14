@@ -13,7 +13,7 @@ type App struct {
 func main() {
 	var myApp App
 
-	myApp.App = app.New()
+	myApp.App = app.NewWithID("com.goalodoro.aa")
 	myApp.MainWindow = myApp.App.NewWindow("Goalodoro")
 	myApp.MainWindow.Resize(fyne.NewSize(600, 500))
 
