@@ -1,66 +1,15 @@
 package home
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
+	"github.com/AlbertArakelyan/goalodoro/models"
 )
-
-type Goal struct {
-	Name        string        `json:"name"`
-	TargetHours float64       `json:"target_hours"`
-	Spent       time.Duration `json:"spent"`
-}
-
-var goals []Goal
-var goalFile = "goals.json"
-
-func loadGoals() {
-	file, err := os.ReadFile(goalFile)
-	if err == nil {
-		_ = json.Unmarshal(file, &goals)
-	}
-}
-
-func saveGoals() {
-	data, _ := json.MarshalIndent(goals, "", "  ")
-	_ = os.WriteFile(goalFile, data, 0644)
-}
-
-func exportGoalsToJSON(mainWondow fyne.Window) {
-	dialog.ShowFileSave(func(uri fyne.URIWriteCloser, err error) {
-		if uri == nil {
-			fmt.Println("Save operation was canceled.")
-			return
-		}
-
-		if err != nil {
-			dialog.ShowError(err, mainWondow)
-			return
-		}
-
-		if uri.URI().Path() == "" {
-			dialog.ShowError(err, mainWondow)
-			return
-		}
-
-		data, _ := json.MarshalIndent(goals, "", "  ")
-		_, err = uri.Write(data)
-
-		if err != nil {
-			dialog.ShowError(err, mainWondow)
-			return
-		}
-
-		_ = uri.Close()
-	}, mainWondow)
-}
 
 func formatDuration(d time.Duration) string {
 	h := int(d.Hours())
@@ -70,19 +19,19 @@ func formatDuration(d time.Duration) string {
 }
 
 func Home(mainWondow fyne.Window) *fyne.Container {
-	loadGoals()
+	models.LoadGoals()
 
 	selectedGoalIndex := -1
 	var ticker *time.Ticker
 	var stopChan chan struct{}
 
 	goalList := widget.NewList(
-		func() int { return len(goals) },
+		func() int { return len(models.Goals) },
 		func() fyne.CanvasObject {
 			return widget.NewLabel("Goal")
 		},
 		func(i int, o fyne.CanvasObject) {
-			g := goals[i]
+			g := models.Goals[i]
 			spentStr := formatDuration(g.Spent)
 			target := time.Duration(g.TargetHours * float64(time.Hour))
 			targetStr := formatDuration(target)
@@ -105,8 +54,8 @@ func Home(mainWondow fyne.Window) *fyne.Container {
 			if ok {
 				var h float64
 				fmt.Sscanf(hours.Text, "%f", &h)
-				goals = append(goals, Goal{Name: name.Text, TargetHours: h})
-				saveGoals()
+				models.Goals = append(models.Goals, models.Goal{Name: name.Text, TargetHours: h})
+				models.SaveGoals()
 				goalList.Refresh()
 			}
 		}, mainWondow)
@@ -128,8 +77,8 @@ func Home(mainWondow fyne.Window) *fyne.Container {
 			for {
 				select {
 				case <-ticker.C:
-					goals[selectedGoalIndex].Spent += time.Second
-					saveGoals()
+					models.Goals[selectedGoalIndex].Spent += time.Second
+					models.SaveGoals()
 					goalList.Refresh()
 				case <-stopChan:
 					ticker.Stop()
@@ -152,9 +101,9 @@ func Home(mainWondow fyne.Window) *fyne.Container {
 			dialog.ShowInformation("No Goal Selected", "Please select a goal to delete.", mainWondow)
 			return
 		}
-		goals = append(goals[:selectedGoalIndex], goals[selectedGoalIndex+1:]...)
+		models.Goals = append(models.Goals[:selectedGoalIndex], models.Goals[selectedGoalIndex+1:]...)
 		// TODO add error handling when deleting a non existing index item
-		saveGoals()
+		models.SaveGoals()
 		goalList.Refresh()
 	})
 
