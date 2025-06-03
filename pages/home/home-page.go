@@ -111,23 +111,6 @@ func Home(mainWondow fyne.Window) *fyne.Container {
 	// 	exportGoalsToJSON(mainWondow)
 	// })
 
-	// booksBtn := widget.NewButton("📚 Growth Reads", func() {
-	// 	books := []string{
-	// 		// "The Power of Now – Eckhart Tolle",
-	// 		// "Can’t Hurt Me – David Goggins",
-	// 		"📘 Atomic Habits — James Clear",
-	// 		"📕 Deep Work — Cal Newport",
-	// 		"📗 The One Thing — Gary Keller",
-	// 		"📙 Grit — Angela Duckworth",
-	// 		"📔 Make Time — Jake Knapp",
-	// 	}
-	// 	msg := "Recommended Reads:\n\n" + fmt.Sprint("- "+books[0])
-	// 	for _, b := range books[1:] {
-	// 		msg += "\n- " + b
-	// 	}
-	// 	dialog.ShowInformation("Growth Books", msg, mainWondow)
-	// })
-
 	controls := container.NewHBox(
 		addGoalBtn,
 		startBtn,
