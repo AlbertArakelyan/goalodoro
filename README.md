@@ -1,9 +1,9 @@
 # Goalodoro
 > A Goal-Focused Time Tracker
 
-<!-- ![GitHub release (latest by date)](https://img.shields.io/github/v/release/AlbertArakelyan/nsw-finance) -->
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/AlbertArakelyan/nsw-finance)
 ![Language](https://img.shields.io/badge/language-go-blue)
-![Platforms](https://img.shields.io/badge/platforms-Mac%20OS-green)
+![Platforms](https://img.shields.io/badge/platforms-Windows,%20Mac%20OS-green)
 ![License](https://img.shields.io/github/license/AlbertArakelyan/goalodoro)
 
 ![Screenshot](./assets/images/screenshot.png)
